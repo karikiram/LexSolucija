@@ -1,0 +1,49 @@
+﻿@model Reminder
+<div class="modal fade" id="addReminder">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addReminderLabel">Add Reminder</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="Edit">
+                    <div class="form-group">
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <input type="hidden" asp-for="@Model.UserId" />
+                        <input type="hidden" asp-for="@Model.Date" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Group"></label>
+                        @Html.DropDownListFor(Model => Model.GroupId, new SelectList(ViewBag.TotalGroups, "Id", "Name"), new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status"></label>
+                        <select asp-for="Status" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                            <option selected>Odaberi...</option>
+                            <option value="False">U obradi</option>
+                            <option value="True">Izvrseno</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Update</button>
+            </div>
+        </div>
+    </div>
+</div>

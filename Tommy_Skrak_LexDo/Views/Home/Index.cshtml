@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Tommy_Skrak_LexDo.Models.Reminder>
+
+@{
+    ViewData["Title"] = "Excel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<button type="button" class="btn btn-primary float-right mb-4 mt-2 ml-2" data-toggle="ajax-modal" data-target="#addReminder"
+        data-url="@Url.Action("Create", "Reminders")">
+    Create Reminder
+</button>
+<button type="button" class="btn btn-warning float-right mb-4 mt-2" data-toggle="ajax-modal" data-target="#addGroup"
+        data-url="@Url.ActionLink("CreateGroup", "Groups")">
+    Create Group
+</button>
+@using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "login-form" }))
+{
+    <form>
+        <div class="mt-2 form-row">
+            <div class="col-md-3">
+                @Html.DropDownList("Filter", new SelectList(ViewBag.TotalGroups, "Id", "Name"), new { @class = "form-control" })
+            </div>
+            <div class="col-md-1">
+                <input type="submit" name="command" class="btn btn-info mb-4" value="Search" />
+            </div>
+            <div class="col-md-1">
+                <input type="submit" name="command" class="btn btn-danger mb-4 ml-3" value="Delete" />
+            </div>
+        </div>
+    </form>
+}
+
+<h1 class="text-center text-white mt-3">
+    Your Reminders
+</h1>
+<form>
+    <div class="mt-2 form-row">
+        <div class="col-md-1 float-left mb-2">
+            @Html.ActionLink("Sort by: Title", "Index", new { sortOrder = ViewBag.TitleSortParm }, new { @class = "btn btn-primary btn-sm" })
+        </div>
+        <div class="col-md-1 float-left mb-2 ml-1">
+            @Html.ActionLink("Sort by: Date", "Index", new { sortOrder = ViewBag.DateSortParm }, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+</form>
+
+<div id="PlaceHolderHere"></div>
+
+@foreach (var item in Model)
+{
+    <div class="card bettercard mb-4" style="width: 20rem; text-align:center;display:inline-block;">
+        <div class="card-block text-white bg-secondary">
+            <p class="card-header">@Html.DisplayFor(modelItem => item.Date)</p>
+            <h4 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h4>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+            <p class="card-text">Status: @Html.CheckBoxFor(modelItem => item.Status, new { @disabled = "true", @class = "" })</p>
+            @Html.ActionLink("Delete", "Delete", "Reminders", new { id = item.Id }, new
+            {
+                @class = "btn btn-danger float-right ml-2 mr-2",
+                @style = "color:white",
+            @OnClick = "return confirm('Are you sure you to delete this Reminder?');"
+            })
+            <button type="button" class="btn btn-info float-right mb-2 ml-2" data-toggle="ajax-modal" data-target="#addReminder"
+                    data-url="@Url.Action("Edit", "Reminders", new { id = item.Id })">
+                Edit
+            </button>
+        </div>
+    </div>
+}
+<div class="col-md-1 mb-2">
+    @using (Html.BeginForm("ExportExcel", "Home", FormMethod.Post))
+    {
+        <button class="btn btn-success order-button">ExportExcel</button>
+    }
+</div>
+
+
